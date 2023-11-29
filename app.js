@@ -62,22 +62,22 @@ console.log("Anshu");
 
 h1 = document.querySelector("h1");
 
-function changeColor(color, delay, nextColorChange){
-    setTimeout(()=>{
-        h1.style.color = color;
-        if(nextColorChange){nextColorChange();}
-    }, delay);
-}
+// function changeColor(color, delay, nextColorChange){
+//     setTimeout(()=>{
+//         h1.style.color = color;
+//         if(nextColorChange){nextColorChange();}
+//     }, delay);
+// }
 
-changeColor("red", 1000, ()=> {
-    changeColor("orange", 1000, ()=>{
-        changeColor("green", 1000, ()=>{
-            changeColor("yellow", 1000, ()=>{
-                changeColor("purple", 1000);
-            });
-        });
-    });
-});
+// changeColor("red", 1000, ()=> {
+//     changeColor("orange", 1000, ()=>{
+//         changeColor("green", 1000, ()=>{
+//             changeColor("yellow", 1000, ()=>{
+//                 changeColor("purple", 1000);
+//             });
+//         });
+//     });
+// });
 
 // This nested callback -> callback hell
 // and it's a problem in JS
@@ -126,7 +126,7 @@ function saveToDB(data){
         } else {
             reject("failed");
         }
-    })
+    });
 }
 
 // saveToDB("anshu");
@@ -146,19 +146,56 @@ function saveToDB(data){
 // });
 
 //* Improved version of promise
+//* Promise chaining
 
-saveToDB("Anshu").then(()=>{
-    console.log("added1");
+saveToDB("Anshu").then((result)=>{
+    console.log("added1 ", result);
     return saveToDB("Anjali");
 })
-.then(()=>{
-    console.log("added2");
+.then((result)=>{
+    console.log("added2 ", result);
     return saveToDB("Anushka");
 })
-.then(()=>{
-    console.log("added3");
+.then((result)=>{
+    console.log("added3 ", result);
 })
 .catch((error)=>{
     console.log("Failed with error:", error);
+});
+
+// result & error se ham extra info print krwa sakte hai
+
+//* Lets make our first callback hell into promises chaining
+
+
+function changeColor(color, delay){
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+            h1.style.color = color;
+            resolve("sucessfully changed");
+        }, delay);
+        
+    });
+}
+
+changeColor("red", 1000)
+.then(()=>{
+    console.log("red color");
+    return changeColor("green", 1000);
+})
+.then(()=>{
+    console.log("green color");
+    return changeColor("yellow", 1000);
+})
+.then(()=>{
+    console.log("yellow color");
+    return changeColor("blue", 1000);
+})
+.then(()=>{
+    console.log("blue color");
+    return changeColor("purple", 1000);
+})
+.then(()=>{
+    console.log("purple color");
 });
 
